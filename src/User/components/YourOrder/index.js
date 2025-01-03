@@ -92,7 +92,7 @@ const YourOrder = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/public/orders/user/${userId}`);
+        const response = await axios.get(`http://localhost:8080/public/orders/status/3/${userId}`);
         setOrders(response.data);
       } catch (error) {
         console.error('Failed to fetch orders:', error);

@@ -15,14 +15,19 @@ import axios from "axios";
 import { useCart } from '../CartContext';
 import CartDrawer from '../CartDrawer';
 import { Link } from 'react-router-dom';
-
+import { jwtDecode } from "jwt-decode";
 
 const UserHomePage = () => {
   const [courses, setCourses] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, addToCart } = useCart();
+  const [userRole, setUserRole] = useState("");
   useEffect(() => {
-    
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUserRole(decodedToken.RoleName); // Lưu RoleName từ token
+    }
     axios.get("http://localhost:8080/public/courses/approved")
       .then(response => {
         const updatedCourses = response.data.map(course => ({
@@ -34,7 +39,7 @@ const UserHomePage = () => {
       .catch(error => {
         console.error("There was an error fetching the courses!", error);
       });
-  }, []);
+  }, [userRole]);
 
   const handleCartOpen = useCallback(() => {
     setIsCartOpen(true);
@@ -57,6 +62,7 @@ const UserHomePage = () => {
         <IconButton
           color="primary"
           onClick={handleCartOpen}
+          disabled={userRole === "Admin"}
         >
           <Badge badgeContent={cartItems.length} color="error">
             <ShoppingCartIcon />
@@ -98,21 +104,25 @@ const UserHomePage = () => {
                   size="small"
                   color="primary"
                   onClick={() => handleAddToCart(course)}
+                  disabled={userRole === "Admin"} // Disable nếu userRole là Admin
                 >
                   Thêm vào giỏ
                 </Button>
+
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
-      
+    
       <CartDrawer
+     
         open={isCartOpen}
         onClose={handleCartClose}
       />
+    
     </div>
-   
+
   );
 };
 

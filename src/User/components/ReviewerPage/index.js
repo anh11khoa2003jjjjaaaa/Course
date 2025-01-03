@@ -78,7 +78,7 @@ const ReviewerPage = () => {
     };
 
     fetchReviewsAndUsers();
-  }, [courseId]);
+  }, [courseId,userMap]);
 
   // Thêm hoặc cập nhật đánh giá
   const handleSaveReview = async () => {
@@ -152,16 +152,21 @@ const ReviewerPage = () => {
             {reviews.map((review) => (
               <ListItem key={review.id} divider>
                 <ListItemText
-                  primary={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Rating value={review.rating} readOnly />
-                      <Typography variant="subtitle2" sx={{ ml: 2 }}>
-                        {userMap[review.userId] || 'Học viên ẩn danh'}
-                      </Typography>
-                    </Box>
-                  }
-                  secondary={review.comment}
-                />
+  primary={
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Rating value={review.rating} readOnly />
+      <Typography variant="subtitle2" sx={{ ml: 2 }}>
+        {userMap[review.userId]
+          ? userRole=== 'Admin'
+            ? `${userMap[review.userId]} (Admin)`
+            : userMap[review.userId]
+          : 'Học viên ẩn danh'}
+      </Typography>
+    </Box>
+  }
+  secondary={review.comment}
+/>
+
                 {/* Nút sửa và xóa */}
                 {(userRole === 'Admin' || review.userId === userId) && (
                   <Box>

@@ -148,6 +148,7 @@ const navigave = useNavigate();
     fetchOrder();
   }, [orderId]);
 
+  
   const handlePayment = async () => {
     try {
       const response = await axios.post('http://localhost:8080/submitOrder', {
@@ -185,10 +186,12 @@ const navigave = useNavigate();
                   <ListItemText primary="Người dùng" secondary={userName} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="Tổng giá" secondary={`${order.totalPrice} VND`} />
+                  <ListItemText primary="Tổng giá" secondary={`${order.totalPrice.toLocaleString('vi-VN')} VND`} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="Trạng thái" secondary={order.statusId} />
+                {order.statusId === 2 &&
+                  <ListItemText primary="Trạng thái" secondary="Chờ thành toán" />
+                }
                 </ListItem>
               </List>
             </CardContent>
