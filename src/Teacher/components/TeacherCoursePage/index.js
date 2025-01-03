@@ -324,7 +324,7 @@ const TeacherCoursePage = () => {
     // Đảm bảo URL video đầy đủ và hợp lệ
     const fullVideoUrl = videoUrl.startsWith('http') 
       ? videoUrl 
-      : `http://localhost:8080/video/${videoUrl.split('\\').pop()}`;
+      : `http://localhost:8080/video/${videoUrl.split('/').pop()}`;
     setVideoUrl(fullVideoUrl);
     setIsVideoModalOpen(true);
   };
